@@ -82,6 +82,89 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .empty-state .icon{font-size:32px;margin-bottom:12px}
 .progress-bar{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
 .progress-fill{height:100%;border-radius:2px;transition:width .3s}
+
+/* ───────── RESPONSIVE CORE ───────── */
+
+.page {
+  padding: 28px 32px;
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Layout */
+  .page {
+    padding: 14px;
+  }
+
+  main {
+    overflow-x: hidden;
+  }
+
+  /* Sidebar → hidden */
+  aside {
+    position: fixed !important;
+    left: -240px;
+    top: 0;
+    height: 100%;
+    z-index: 1000;
+    transition: 0.3s;
+  }
+
+  aside.open {
+    left: 0;
+  }
+
+  /* Top mobile bar */
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Grids collapse */
+  .grid-5 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tables → hide */
+  table {
+    display: none;
+  }
+
+  /* Cards spacing */
+  .card {
+    padding: 14px;
+  }
+
+  /* Buttons bigger (touch) */
+  .btn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  input, select, textarea {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* Fix header overflow */
+  .topbar-right {
+    flex-wrap: wrap;
+  }
+}
 </style>
 </head>
 <body>
@@ -92,7 +175,7 @@ const { useState, useEffect, useRef, useCallback } = React;
 // ── SEED DATA ──────────────────────────────────────────────────────────────────
 const SEED = {
   users: [
-    { id:'u1', name:'Siddharta Bam', email:'siddharta@ledgeros.in', role:'Admin', avatar:'SB' },
+    { id:'u1', name:'Siddhartha Bam', email:'siddhartha@ledgeros.in', role:'Admin', avatar:'SB' },
     { id:'u2', name:'Priya Sharma', email:'priya@ledgeros.in', role:'CA', avatar:'PS' },
     { id:'u3', name:'Arjun Patel', email:'arjun@ledgeros.in', role:'Staff', avatar:'AP' },
     { id:'u4', name:'Sneha Joshi', email:'sneha@ledgeros.in', role:'Staff', avatar:'SJ' },
@@ -232,8 +315,8 @@ const Sidebar=({page,setPage})=>(
       ))}
     </nav>
     <div style={{padding:'14px 16px',borderTop:'1px solid var(--border)',display:'flex',alignItems:'center',gap:10}}>
-      <Avatar name="Siddharta Bam" size={30}/>
-      <div><div style={{fontSize:13,fontWeight:500}}>Siddharta Bam</div><div style={{fontSize:11,color:'var(--text3)'}}>Admin</div></div>
+      <Avatar name="Siddhartha Bam" size={30}/>
+      <div><div style={{fontSize:13,fontWeight:500}}>Siddhartha Bam</div><div style={{fontSize:11,color:'var(--text3)'}}>Admin</div></div>
     </div>
   </aside>
 );
