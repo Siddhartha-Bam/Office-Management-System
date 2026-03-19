@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LedgerOS — CA Firm Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f12;
+  --bg2:#131619;
+  --bg3:#191d21;
+  --bg4:#1f2429;
+  --border:#2a3038;
+  --border2:#333d47;
+  --text:#e8edf2;
+  --text2:#9aa5b4;
+  --text3:#5c6b7a;
+  --accent:#e8a045;
+  --accent2:#f0b866;
+  --blue:#4a9eff;
+  --green:#3ecf8e;
+  --red:#f87171;
+  --purple:#a78bfa;
+  --teal:#2dd4bf;
+  --font-serif:'DM Serif Display',serif;
+  --font-sans:'Outfit',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --r:8px;
+  --r2:12px;
+  --r3:16px;
+}
+html,body,#root{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.5}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+button{font-family:var(--font-sans);cursor:pointer;border:none;background:none;color:var(--text)}
+input,textarea,select{font-family:var(--font-sans);background:var(--bg4);border:1px solid var(--border);color:var(--text);border-radius:var(--r);padding:8px 12px;font-size:13px;width:100%;outline:none;transition:border .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--border2)}
+select option{background:var(--bg3)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500;letter-spacing:.02em}
+.badge-amber{background:rgba(232,160,69,.15);color:var(--accent2)}
+.badge-green{background:rgba(62,207,142,.12);color:var(--green)}
+.badge-red{background:rgba(248,113,113,.12);color:var(--red)}
+.badge-blue{background:rgba(74,158,255,.12);color:var(--blue)}
+.badge-purple{background:rgba(167,139,250,.12);color:var(--purple)}
+.badge-teal{background:rgba(45,212,191,.12);color:var(--teal)}
+.badge-gray{background:rgba(156,165,180,.1);color:var(--text2)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r);font-size:13px;font-weight:500;transition:all .15s;cursor:pointer;border:1px solid transparent}
+.btn-primary{background:var(--accent);color:#0d0f12;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:transparent;color:var(--text2);border-color:var(--border)}
+.btn-ghost:hover{background:var(--bg4);color:var(--text);border-color:var(--border2)}
+.btn-danger{background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r3);padding:28px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-lg{max-width:780px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 14px;font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.stat-num{font-family:var(--font-serif);font-size:32px;color:var(--text);line-height:1}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:var(--bg4);color:var(--text2);border:1px solid var(--border)}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.dot-green{background:var(--green)}
+.dot-amber{background:var(--accent)}
+.dot-red{background:var(--red)}
+.dot-blue{background:var(--blue)}
+.dot-gray{background:var(--text3)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-state .icon{font-size:32px;margin-bottom:12px}
+.progress-bar{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .3s}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ── SEED DATA ──────────────────────────────────────────────────────────────────
+const SEED = {
+  users: [
+    { id:'u1', name:'Siddharta Bam', email:'siddharta@ledgeros.in', role:'Admin', avatar:'SB' },
+    { id:'u2', name:'Priya Sharma', email:'priya@ledgeros.in', role:'CA', avatar:'PS' },
+    { id:'u3', name:'Arjun Patel', email:'arjun@ledgeros.in', role:'Staff', avatar:'AP' },
+    { id:'u4', name:'Sneha Joshi', email:'sneha@ledgeros.in', role:'Staff', avatar:'SJ' },
+  ],
+  clients: [
+    { id:'c1', name:'Ratan Industries Pvt Ltd', pan:'AACFR1234K', gstin:'27AACFR1234K1ZM', cin:'U74900MH2010PTC200001', type:'Company', phone:'9821001234', email:'accounts@ratanindustries.com', assignedStaff:'u2', services:['GST','TDS','ROC'], city:'Mumbai' },
+    { id:'c2', name:'Amit Desai', pan:'AAKPD5678B', gstin:'27AAKPD5678B1ZP', cin:'', type:'Individual', phone:'9833002345', email:'amitdesai@gmail.com', assignedStaff:'u3', services:['ITR'], city:'Pune' },
+    { id:'c3', name:'Skyline Traders LLP', pan:'AAFFS9012C', gstin:'29AAFFS9012C1ZL', cin:'', type:'Partnership', phone:'9844003456', email:'finance@skylinetraders.com', assignedStaff:'u2', services:['GST','ITR'], city:'Bangalore' },
+    { id:'c4', name:'Nirmala Healthcare Ltd', pan:'AADCN4567D', gstin:'27AADCN4567D1ZK', cin:'U85100MH2015PLC280002', type:'Company', phone:'9867004567', email:'cfo@nirmalahc.com', assignedStaff:'u4', services:['GST','TDS','ROC','Audit'], city:'Mumbai' },
+    { id:'c5', name:'Vikram Constructions', pan:'AADVK2389E', gstin:'29AADVK2389E1ZN', cin:'', type:'Partnership', phone:'9823005678', email:'accounts@vikramcon.in', assignedStaff:'u3', services:['GST','ITR','TDS'], city:'Hyderabad' },
+  ],
+  services: [
+    { id:'s1', name:'GST Filing', freq:'Monthly', color:'blue', steps:['Collect invoices','Reconcile GSTR-2B','Prepare GSTR-1','Prepare GSTR-3B','Client approval','File on portal','Upload ARN'] },
+    { id:'s2', name:'ITR Filing', freq:'Annual', color:'green', steps:['Collect Form 16 & 26AS','Reconcile AIS/TIS','Compute tax liability','Prepare computation sheet','Client approval','E-file on IT portal','Upload acknowledgement'] },
+    { id:'s3', name:'TDS Filing', freq:'Quarterly', color:'amber', steps:['Collect challans','Verify TDS deductions','Prepare 24Q/26Q','File TDS return','Download Form 16/16A'] },
+    { id:'s4', name:'ROC Filing', freq:'Annual', color:'purple', steps:['Prepare financial statements','Board resolution','File MGT-7/AOC-4','Director\'s report','Upload to MCA portal'] },
+    { id:'s5', name:'Audit', freq:'Annual', color:'teal', steps:['Request trial balance','Vouching & verification','Prepare audit report','Management letter','Sign & submit'] },
+  ],
+  tasks: [
+    { id:'t1', title:'GSTR-3B for April 2025', client:'c1', service:'s1', step:'Reconcile GSTR-2B', assigned:'u2', status:'In Progress', priority:'High', due:'2025-05-20', notes:'Pending ITC claim mismatch for 3 invoices', docs:['d1'] },
+    { id:'t2', title:'ITR FY24-25 — Amit Desai', client:'c2', service:'s2', step:'Collect Form 16 & 26AS', assigned:'u3', status:'Waiting on Client', priority:'High', due:'2025-07-31', notes:'Form 16 not received. Reminder sent on 5 May.', docs:[] },
+    { id:'t3', title:'TDS Q4 Return — Skyline Traders', client:'c3', service:'s3', step:'Verify TDS deductions', assigned:'u2', status:'In Progress', priority:'Medium', due:'2025-05-31', notes:'', docs:['d2'] },
+    { id:'t4', title:'GSTR-1 April 2025 — Nirmala Healthcare', client:'c4', service:'s1', step:'Collect invoices', assigned:'u4', status:'Pending', priority:'High', due:'2025-05-11', notes:'', docs:[] },
+    { id:'t5', title:'ROC Annual Filing — Ratan Industries', client:'c1', service:'s4', step:'Prepare financial statements', assigned:'u2', status:'Pending', priority:'Medium', due:'2025-09-30', notes:'', docs:[] },
+    { id:'t6', title:'ITR FY24-25 — Vikram Constructions', client:'c5', service:'s2', step:'Compute tax liability', assigned:'u3', status:'In Progress', priority:'Medium', due:'2025-07-31', notes:'New regime opted this year', docs:[] },
+    { id:'t7', title:'GSTR-3B March 2025 — Skyline Traders', client:'c3', service:'s1', step:'File on portal', assigned:'u2', status:'Completed', priority:'High', due:'2025-04-20', notes:'Filed. ARN: AA2703240012345', docs:['d3'] },
+    { id:'t8', title:'Audit FY24-25 — Nirmala Healthcare', client:'c4', service:'s5', step:'Request trial balance', assigned:'u4', status:'Waiting on Client', priority:'High', due:'2025-06-30', notes:'Trial balance pending from client', docs:[] },
+    { id:'t9', title:'TDS Q1 FY25-26 — Nirmala Healthcare', client:'c4', service:'s3', step:'Collect challans', assigned:'u4', status:'Pending', priority:'Low', due:'2025-07-31', notes:'', docs:[] },
+    { id:'t10', title:'GSTR-1 April 2025 — Vikram Constructions', client:'c5', service:'s1', step:'Prepare GSTR-1', assigned:'u3', status:'Completed', priority:'High', due:'2025-05-11', notes:'', docs:[] },
+  ],
+  documents: [
+    { id:'d1', name:'April_Sales_Register.xlsx', client:'c1', task:'t1', type:'Sales Register', fy:'FY24-25', uploaded:'2025-05-03', uploadedBy:'u2', size:'245 KB' },
+    { id:'d2', name:'Challan_Q4_Skyline.pdf', client:'c3', task:'t3', type:'TDS Challan', fy:'FY24-25', uploaded:'2025-04-28', uploadedBy:'u2', size:'120 KB' },
+    { id:'d3', name:'GSTR3B_March_Skyline_ARN.pdf', client:'c3', task:'t7', type:'Filed Return', fy:'FY24-25', uploaded:'2025-04-20', uploadedBy:'u2', size:'89 KB' },
+    { id:'d4', name:'BalanceSheet_FY2425_Nirmala.pdf', client:'c4', task:'t8', type:'Financial Statement', fy:'FY24-25', uploaded:'2025-04-15', uploadedBy:'u4', size:'1.2 MB' },
+  ],
+  meetings: [
+    { id:'m1', title:'GST Compliance Review', client:'c1', type:'Client', status:'Scheduled', date:'2025-05-22T11:00', participants:['u2','u1'], agenda:'Review April GST discrepancies, plan for Q1 filing', notes:'', actions:[] },
+    { id:'m2', title:'Article Training — TDS Procedures', client:null, type:'Internal', status:'Completed', date:'2025-05-10T10:00', participants:['u1','u2','u3','u4'], agenda:'Refresh training on 26Q filing', notes:'All staff attended. Key points noted on shared drive.', actions:['u3 to update TDS checklist template','u4 to review all pending challan uploads'] },
+    { id:'m3', title:'Audit Planning — Nirmala Healthcare', client:'c4', type:'Client', status:'Scheduled', date:'2025-05-28T14:00', participants:['u1','u4'], agenda:'Audit scope discussion, document checklist handover', notes:'', actions:[] },
+  ],
+  communications: [
+    { id:'com1', client:'c2', task:'t2', channel:'Email', note:'Sent Form 16 request to client. No response yet.', by:'u3', date:'2025-05-05' },
+    { id:'com2', client:'c1', task:'t1', channel:'Call', note:'Client confirmed missing invoices will be shared by EOD.', by:'u2', date:'2025-05-06' },
+    { id:'com3', client:'c4', task:'t8', channel:'Email', note:'Sent trial balance request to CFO Rajesh Kumar.', by:'u4', date:'2025-05-07' },
+  ],
+  invoices: [
+    { id:'inv1', client:'c3', service:'s1', desc:'GSTR-3B Filing — March 2025', amount:3500, paid:3500, status:'Paid', date:'2025-04-22' },
+    { id:'inv2', client:'c1', service:'s4', desc:'ROC Annual Filing FY23-24', amount:18000, paid:0, status:'Unpaid', date:'2025-04-01' },
+    { id:'inv3', client:'c4', service:'s5', desc:'Statutory Audit FY24-25', amount:45000, paid:22500, status:'Partial', date:'2025-04-15' },
+    { id:'inv4', client:'c5', service:'s2', desc:'ITR Filing FY24-25', amount:8500, paid:0, status:'Unpaid', date:'2025-05-01' },
+  ],
+  auditLog: [
+    { id:'al1', actor:'u2', action:'Updated task status', entity:'Task', detail:'GSTR-3B March Skyline → Completed', ts:'2025-04-20T15:32' },
+    { id:'al2', actor:'u3', action:'Uploaded document', entity:'Document', detail:'April_Sales_Register.xlsx for Ratan Industries', ts:'2025-05-03T10:18' },
+    { id:'al3', actor:'u2', action:'Added communication log', entity:'Communication', detail:'Call note for Ratan Industries', ts:'2025-05-06T12:45' },
+    { id:'al4', actor:'u1', action:'Created client', entity:'Client', detail:'Vikram Constructions added to system', ts:'2025-04-10T09:00' },
+    { id:'al5', actor:'u4', action:'Scheduled meeting', entity:'Meeting', detail:'Audit Planning with Nirmala Healthcare', ts:'2025-05-08T11:20' },
+  ],
+};
+
+// ── HELPERS ────────────────────────────────────────────────────────────────────
+const fmtDate = d => d ? new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+const today = new Date('2025-05-10');
+const isOverdue = d => d && new Date(d) < today;
+const daysLeft = d => Math.ceil((new Date(d) - today)/(1000*60*60*24));
+
+const statusColor = s => ({
+  'Pending':'badge-gray','In Progress':'badge-blue',
+  'Waiting on Client':'badge-amber','Completed':'badge-green',
+  'Overdue':'badge-red','Scheduled':'badge-blue','Cancelled':'badge-red'
+})[s]||'badge-gray';
+
+const prioColor = p => ({'High':'badge-red','Medium':'badge-amber','Low':'badge-teal'})[p]||'badge-gray';
+const svcColor = c => ({'blue':'badge-blue','green':'badge-green','amber':'badge-amber','purple':'badge-purple','teal':'badge-teal'})[c]||'badge-gray';
+
+const Avatar = ({name,size=28}) => {
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const colors = ['#e8a045','#4a9eff','#3ecf8e','#a78bfa','#f87171','#2dd4bf'];
+  const c = colors[name.charCodeAt(0)%colors.length];
+  return <div style={{width:size,height:size,borderRadius:'50%',background:c+'22',border:`1px solid ${c}55`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:size*.38,fontWeight:600,color:c,flexShrink:0,fontFamily:'var(--font-mono)'}}>{initials}</div>;
+};
+
+const Icon = ({n,size=14}) => {
+  const icons = {
+    dashboard:'⊞',clients:'◎',tasks:'▦',docs:'◫',deadline:'◷',comms:'◻',billing:'◈',users:'◉',meetings:'◑',audit:'◍',settings:'⊙',
+    plus:'+',search:'⌕',filter:'⊟',bell:'◬',check:'✓',x:'✕',arrow:'→',back:'←',edit:'✎',trash:'⌫',upload:'↑',download:'↓',
+    warning:'⚠',info:'ℹ',clock:'◷',calendar:'▦',
+  };
+  return <span style={{fontSize:size,lineHeight:1}}>{icons[n]||'•'}</span>;
+};
+
+// ── MODAL ──────────────────────────────────────────────────────────────────────
+const Modal = ({title,onClose,children,lg})=>(
+  <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className={`modal${lg?' modal-lg':''}`}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+        <h3 style={{fontFamily:'var(--font-serif)',fontSize:20,color:'var(--text)'}}>{title}</h3>
+        <button className="btn btn-ghost" style={{padding:'4px 8px'}} onClick={onClose}><Icon n="x"/></button>
+      </div>
+      {children}
+    </div>
+  </div>
+);
+
+// ── SIDEBAR ────────────────────────────────────────────────────────────────────
+const MENU=[
+  {id:'dashboard',label:'Dashboard',icon:'dashboard'},
+  {id:'clients',label:'Clients',icon:'clients'},
+  {id:'tasks',label:'Tasks',icon:'tasks'},
+  {id:'compliance',label:'Compliance',icon:'deadline'},
+  {id:'documents',label:'Documents',icon:'docs'},
+  {id:'meetings',label:'Meetings',icon:'meetings'},
+  {id:'communications',label:'Communications',icon:'comms'},
+  {id:'billing',label:'Billing',icon:'billing'},
+  {id:'users',label:'Team',icon:'users'},
+  {id:'audit',label:'Audit Trail',icon:'audit'},
+];
+
+const Sidebar=({page,setPage})=>(
+  <aside style={{width:220,background:'var(--bg2)',borderRight:'1px solid var(--border)',display:'flex',flexDirection:'column',flexShrink:0}}>
+    <div style={{padding:'22px 20px 18px',borderBottom:'1px solid var(--border)'}}>
+      <div style={{fontFamily:'var(--font-serif)',fontSize:22,color:'var(--accent)',letterSpacing:'-0.02em',lineHeight:1}}>LedgerOS</div>
+      <div style={{fontSize:11,color:'var(--text3)',marginTop:3,letterSpacing:'.06em',fontFamily:'var(--font-mono)'}}>CA FIRM · OFFICE SUITE</div>
+    </div>
+    <nav style={{flex:1,padding:'10px 10px',overflowY:'auto'}}>
+      {MENU.map(m=>(
+        <button key={m.id} onClick={()=>setPage(m.id)} style={{
+          width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 12px',borderRadius:'var(--r)',
+          marginBottom:2,background:page===m.id?'rgba(232,160,69,.1)':'transparent',
+          color:page===m.id?'var(--accent)':'var(--text2)',fontWeight:page===m.id?500:400,fontSize:13,
+          border:page===m.id?'1px solid rgba(232,160,69,.15)':'1px solid transparent',
+          transition:'all .15s',textAlign:'left'
+        }}>
+          <Icon n={m.icon} size={13}/>{m.label}
+        </button>
+      ))}
+    </nav>
+    <div style={{padding:'14px 16px',borderTop:'1px solid var(--border)',display:'flex',alignItems:'center',gap:10}}>
+      <Avatar name="Siddharta Bam" size={30}/>
+      <div><div style={{fontSize:13,fontWeight:500}}>Siddharta Bam</div><div style={{fontSize:11,color:'var(--text3)'}}>Admin</div></div>
+    </div>
+  </aside>
+);
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────────
+const Dashboard=({data,setPage})=>{
+  const overdue=data.tasks.filter(t=>t.status!=='Completed'&&isOverdue(t.due));
+  const next7=data.tasks.filter(t=>t.status!=='Completed'&&!isOverdue(t.due)&&daysLeft(t.due)<=7);
+  const waiting=data.tasks.filter(t=>t.status==='Waiting on Client');
+  const missingDocs=data.tasks.filter(t=>t.status!=='Completed'&&t.docs.length===0);
+  const totalRev=data.invoices.reduce((a,i)=>a+i.amount,0);
+  const totalPaid=data.invoices.reduce((a,i)=>a+i.paid,0);
+  const outstanding=totalRev-totalPaid;
+
+  const workload=data.users.slice(1).map(u=>({
+    user:u,count:data.tasks.filter(t=>t.assigned===u.id&&t.status!=='Completed').length
+  }));
+
+  return (
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{marginBottom:28}}>
+        <h1 style={{fontFamily:'var(--font-serif)',fontSize:28,marginBottom:4}}>Good morning, Siddharta</h1>
+        <p style={{color:'var(--text2)',fontSize:13}}>Friday, 10 May 2025 — Here's your firm at a glance</p>
+      </div>
+
+      {/* Critical alerts */}
+      {overdue.length>0&&(
+        <div style={{background:'rgba(248,113,113,.08)',border:'1px solid rgba(248,113,113,.2)',borderRadius:'var(--r2)',padding:'12px 16px',marginBottom:20,display:'flex',alignItems:'center',gap:12}}>
+          <Icon n="warning" size={16}/>
+          <span style={{color:'var(--red)',fontSize:13,fontWeight:500}}>{overdue.length} task{overdue.length>1?'s':''} overdue</span>
+          <button className="btn btn-ghost" style={{marginLeft:'auto',fontSize:12,padding:'4px 10px'}} onClick={()=>setPage('tasks')}>View tasks →</button>
+        </div>
+      )}
+
+      {/* Stats row */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:14,marginBottom:24}}>
+        {[
+          {label:'Active Clients',val:data.clients.length,color:'var(--blue)'},
+          {label:'Overdue Tasks',val:overdue.length,color:'var(--red)'},
+          {label:'Due This Week',val:next7.length,color:'var(--accent)'},
+          {label:'Waiting on Client',val:waiting.length,color:'var(--purple)'},
+          {label:'Outstanding (₹)',val:'₹'+outstanding.toLocaleString('en-IN'),color:'var(--green)'},
+        ].map(s=>(
+          <div key={s.label} className="card" style={{padding:'16px 18px'}}>
+            <div style={{fontSize:11,color:'var(--text3)',marginBottom:8,fontFamily:'var(--font-mono)',textTransform:'uppercase',letterSpacing:'.06em'}}>{s.label}</div>
+            <div style={{fontFamily:'var(--font-serif)',fontSize:26,color:s.color}}>{s.val}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:20}}>
+        {/* Upcoming deadlines */}
+        <div className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+            <h3 style={{fontSize:14,fontWeight:500}}>Upcoming deadlines</h3>
+            <span className="badge badge-amber">{next7.length} this week</span>
+          </div>
+          {next7.length===0&&<div className="empty-state"><div>All clear this week</div></div>}
+          {next7.slice(0,5).map(t=>{
+            const cl=data.clients.find(c=>c.id===t.client);
+            const d=daysLeft(t.due);
+            return(
+              <div key={t.id} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+                <div style={{width:4,height:36,borderRadius:2,background:d<=2?'var(--red)':d<=4?'var(--accent)':'var(--blue)',flexShrink:0}}/>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:13,fontWeight:500,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{t.title}</div>
+                  <div style={{fontSize:11,color:'var(--text3)'}}>{cl?.name}</div>
+                </div>
+                <div style={{fontSize:12,color:d<=2?'var(--red)':d<=4?'var(--accent)':'var(--text2)',textAlign:'right',flexShrink:0}}>
+                  {d===0?'Today':d===1?'Tomorrow':`${d}d`}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Staff workload */}
+        <div className="card">
+          <h3 style={{fontSize:14,fontWeight:500,marginBottom:16}}>Staff workload</h3>
+          {workload.map(({user,count})=>(
+            <div key={user.id} style={{marginBottom:14}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
+                <div style={{display:'flex',alignItems:'center',gap:8}}>
+                  <Avatar name={user.name} size={22}/>
+                  <span style={{fontSize:13}}>{user.name}</span>
+                  <span className="badge badge-gray" style={{fontSize:10}}>{user.role}</span>
+                </div>
+                <span style={{fontSize:12,fontFamily:'var(--font-mono)',color:'var(--text2)'}}>{count} active</span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width:`${Math.min(count/8*100,100)}%`,background:count>5?'var(--red)':count>3?'var(--accent)':'var(--green)'}}/>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20}}>
+        {/* Missing documents */}
+        <div className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+            <h3 style={{fontSize:14,fontWeight:500}}>Missing documents</h3>
+            <span className="badge badge-red">{missingDocs.length} tasks</span>
+          </div>
+          {missingDocs.slice(0,4).map(t=>{
+            const cl=data.clients.find(c=>c.id===t.client);
+            return(
+              <div key={t.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+                <div>
+                  <div style={{fontSize:13,fontWeight:500}}>{t.title}</div>
+                  <div style={{fontSize:11,color:'var(--text3)'}}>{cl?.name}</div>
+                </div>
+                <span className="badge badge-red">0 docs</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Revenue snapshot */}
+        <div className="card">
+          <h3 style={{fontSize:14,fontWeight:500,marginBottom:16}}>Revenue snapshot</h3>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:16}}>
+            {[
+              {l:'Total billed',v:'₹'+totalRev.toLocaleString('en-IN'),c:'var(--text)'},
+              {l:'Collected',v:'₹'+totalPaid.toLocaleString('en-IN'),c:'var(--green)'},
+              {l:'Outstanding',v:'₹'+outstanding.toLocaleString('en-IN'),c:'var(--red)'},
+              {l:'Invoices',v:data.invoices.length,c:'var(--text2)'},
+            ].map(r=>(
+              <div key={r.l} style={{background:'var(--bg3)',borderRadius:'var(--r)',padding:'12px 14px'}}>
+                <div style={{fontSize:11,color:'var(--text3)',marginBottom:4}}>{r.l}</div>
+                <div style={{fontSize:18,fontFamily:'var(--font-serif)',color:r.c}}>{r.v}</div>
+              </div>
+            ))}
+          </div>
+          {data.invoices.filter(i=>i.status!=='Paid').map(inv=>{
+            const cl=data.clients.find(c=>c.id===inv.client);
+            return(
+              <div key={inv.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'7px 0',borderBottom:'1px solid var(--border)'}}>
+                <div style={{fontSize:12,color:'var(--text2)'}}>{cl?.name}</div>
+                <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                  <span style={{fontSize:12,fontFamily:'var(--font-mono)'}}>₹{(inv.amount-inv.paid).toLocaleString('en-IN')}</span>
+                  <span className={`badge ${inv.status==='Partial'?'badge-amber':'badge-red'}`}>{inv.status}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── CLIENTS ────────────────────────────────────────────────────────────────────
+const ClientsPage=({data,setData})=>{
+  const [search,setSearch]=useState('');
+  const [filter,setFilter]=useState('All');
+  const [modal,setModal]=useState(null);
+  const [form,setForm]=useState({name:'',pan:'',gstin:'',cin:'',type:'Company',phone:'',email:'',city:'',assignedStaff:'u2',services:[]});
+  const [detail,setDetail]=useState(null);
+
+  const filtered=data.clients.filter(c=>{
+    const q=search.toLowerCase();
+    return (filter==='All'||c.type===filter)&&
+      (c.name.toLowerCase().includes(q)||c.pan.toLowerCase().includes(q)||c.gstin.toLowerCase().includes(q));
+  });
+
+  const save=()=>{
+    if(!form.name||!form.pan){alert('Name and PAN required');return;}
+    if(modal==='add'){
+      const nc={...form,id:'c'+(Date.now()),services:form.services};
+      setData(d=>({...d,clients:[...d.clients,nc]}));
+    } else {
+      setData(d=>({...d,clients:d.clients.map(c=>c.id===form.id?form:c)}));
+    }
+    setModal(null);
+  };
+
+  const openEdit=c=>{setForm({...c});setModal('edit');};
+  const del=id=>{if(confirm('Delete client?'))setData(d=>({...d,clients:d.clients.filter(c=>c.id!==id)}));};
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Clients</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>{data.clients.length} clients in the system</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({name:'',pan:'',gstin:'',cin:'',type:'Company',phone:'',email:'',city:'',assignedStaff:'u2',services:[]});setModal('add');}}>
+          <Icon n="plus"/> Add client
+        </button>
+      </div>
+
+      <div style={{display:'flex',gap:12,marginBottom:20}}>
+        <div style={{flex:1,position:'relative'}}>
+          <input placeholder="Search by name, PAN, GSTIN…" value={search} onChange={e=>setSearch(e.target.value)} style={{paddingLeft:32}}/>
+          <span style={{position:'absolute',left:10,top:'50%',transform:'translateY(-50%)',color:'var(--text3)'}}><Icon n="search"/></span>
+        </div>
+        {['All','Company','Individual','Partnership'].map(f=>(
+          <button key={f} className={`btn ${filter===f?'btn-primary':'btn-ghost'}`} onClick={()=>setFilter(f)}>{f}</button>
+        ))}
+      </div>
+
+      <div className="card" style={{padding:0}}>
+        <table>
+          <thead><tr>
+            <th>Client</th><th>PAN</th><th>GSTIN</th><th>Type</th><th>Services</th><th>Assigned to</th><th>Actions</th>
+          </tr></thead>
+          <tbody>
+            {filtered.map(c=>{
+              const staff=data.users.find(u=>u.id===c.assignedStaff);
+              const tasks=data.tasks.filter(t=>t.client===c.id&&t.status!=='Completed');
+              return(
+                <tr key={c.id}>
+                  <td>
+                    <div style={{fontWeight:500,cursor:'pointer',color:'var(--accent)'}} onClick={()=>setDetail(c)}>{c.name}</div>
+                    <div style={{fontSize:11,color:'var(--text3)'}}>{c.city} · {c.phone}</div>
+                  </td>
+                  <td><span style={{fontFamily:'var(--font-mono)',fontSize:12}}>{c.pan}</span></td>
+                  <td><span style={{fontFamily:'var(--font-mono)',fontSize:11,color:'var(--text2)'}}>{c.gstin||'—'}</span></td>
+                  <td><span className={`badge ${c.type==='Company'?'badge-blue':c.type==='Individual'?'badge-green':'badge-purple'}`}>{c.type}</span></td>
+                  <td>
+                    <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+                      {c.services.map(s=>{const svc=data.services.find(x=>x.name===s);return svc?<span key={s} className={`badge badge-${svc.color}`}>{s}</span>:null;})}
+                    </div>
+                  </td>
+                  <td>
+                    <div style={{display:'flex',alignItems:'center',gap:6}}>
+                      <Avatar name={staff?.name||''} size={22}/>
+                      <span style={{fontSize:12}}>{staff?.name}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style={{display:'flex',gap:6}}>
+                      {tasks.length>0&&<span className="badge badge-amber">{tasks.length} tasks</span>}
+                      <button className="btn btn-ghost" style={{padding:'4px 8px',fontSize:11}} onClick={()=>openEdit(c)}>Edit</button>
+                      <button className="btn btn-ghost" style={{padding:'4px 8px',fontSize:11}} onClick={()=>del(c.id)}>Del</button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Add/Edit Modal */}
+      {(modal==='add'||modal==='edit')&&(
+        <Modal title={modal==='add'?'Add New Client':'Edit Client'} onClose={()=>setModal(null)}>
+          <div className="form-row">
+            <div className="form-group"><label>Full name *</label><input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/></div>
+            <div className="form-group"><label>Client type</label>
+              <select value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>
+                {['Company','Individual','Partnership'].map(t=><option key={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>PAN *</label><input value={form.pan} onChange={e=>setForm(f=>({...f,pan:e.target.value.toUpperCase()}))} placeholder="AAAAA1234A" maxLength={10}/></div>
+            <div className="form-group"><label>GSTIN</label><input value={form.gstin} onChange={e=>setForm(f=>({...f,gstin:e.target.value.toUpperCase()}))} placeholder="27AAAAA1234A1Z1" maxLength={15}/></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>CIN (if company)</label><input value={form.cin} onChange={e=>setForm(f=>({...f,cin:e.target.value}))}/></div>
+            <div className="form-group"><label>City</label><input value={form.city} onChange={e=>setForm(f=>({...f,city:e.target.value}))}/></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>Email</label><input value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))}/></div>
+            <div className="form-group"><label>Phone</label><input value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value}))}/></div>
+          </div>
+          <div className="form-group"><label>Assigned staff</label>
+            <select value={form.assignedStaff} onChange={e=>setForm(f=>({...f,assignedStaff:e.target.value}))}>
+              {data.users.filter(u=>u.role!=='Admin').map(u=><option key={u.id} value={u.id}>{u.name} ({u.role})</option>)}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Services enrolled</label>
+            <div style={{display:'flex',flexWrap:'wrap',gap:8,marginTop:4}}>
+              {data.services.map(s=>(
+                <label key={s.id} style={{display:'flex',alignItems:'center',gap:6,cursor:'pointer',fontSize:13}}>
+                  <input type="checkbox" checked={form.services.includes(s.name)} onChange={e=>{
+                    setForm(f=>({...f,services:e.target.checked?[...f.services,s.name]:f.services.filter(x=>x!==s.name)}));
+                  }} style={{width:'auto'}}/>
+                  <span className={`badge badge-${s.color}`}>{s.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:8}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Save client</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Client detail modal */}
+      {detail&&(
+        <Modal title={detail.name} onClose={()=>setDetail(null)} lg>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20}}>
+            <div>
+              <div style={{marginBottom:14}}>
+                <div style={{fontSize:11,color:'var(--text3)',marginBottom:4,textTransform:'uppercase',letterSpacing:'.06em'}}>Identifiers</div>
+                {[['PAN',detail.pan],['GSTIN',detail.gstin||'—'],['CIN',detail.cin||'—']].map(([k,v])=>(
+                  <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'6px 0',borderBottom:'1px solid var(--border)'}}>
+                    <span style={{fontSize:12,color:'var(--text3)'}}>{k}</span>
+                    <span style={{fontFamily:'var(--font-mono)',fontSize:12}}>{v}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{marginBottom:14}}>
+                <div style={{fontSize:11,color:'var(--text3)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.06em'}}>Services</div>
+                <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+                  {detail.services.map(s=>{const svc=data.services.find(x=>x.name===s);return svc?<span key={s} className={`badge badge-${svc.color}`}>{s}</span>:null;})}
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:'var(--text3)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.06em'}}>Active Tasks</div>
+              {data.tasks.filter(t=>t.client===detail.id&&t.status!=='Completed').map(t=>(
+                <div key={t.id} style={{background:'var(--bg3)',borderRadius:'var(--r)',padding:'10px 12px',marginBottom:8}}>
+                  <div style={{fontSize:13,fontWeight:500}}>{t.title}</div>
+                  <div style={{display:'flex',gap:8,marginTop:4}}>
+                    <span className={`badge ${statusColor(t.status)}`}>{t.status}</span>
+                    <span style={{fontSize:11,color:'var(--text3)'}}>Due {fmtDate(t.due)}</span>
+                  </div>
+                </div>
+              ))}
+              {data.tasks.filter(t=>t.client===detail.id&&t.status!=='Completed').length===0&&
+                <div style={{fontSize:13,color:'var(--text3)'}}>No active tasks</div>}
+            </div>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── TASKS ──────────────────────────────────────────────────────────────────────
+const TasksPage=({data,setData})=>{
+  const [filter,setFilter]=useState({status:'All',assigned:'All',priority:'All'});
+  const [modal,setModal]=useState(null);
+  const [form,setForm]=useState({title:'',client:'c1',service:'s1',step:'',assigned:'u2',status:'Pending',priority:'Medium',due:'',notes:''});
+
+  const filtered=data.tasks.filter(t=>{
+    return (filter.status==='All'||t.status===filter.status)&&
+      (filter.assigned==='All'||t.assigned===filter.assigned)&&
+      (filter.priority==='All'||t.priority===filter.priority);
+  });
+
+  const updateStatus=(id,status)=>{
+    setData(d=>{
+      const newLog={id:'al'+(Date.now()),actor:'u1',action:'Updated task status',entity:'Task',detail:`Task ${id} → ${status}`,ts:new Date().toISOString()};
+      return{...d,tasks:d.tasks.map(t=>t.id===id?{...t,status}:t),auditLog:[newLog,...d.auditLog]};
+    });
+  };
+
+  const save=()=>{
+    if(!form.title){alert('Title required');return;}
+    const nt={...form,id:'t'+(Date.now()),docs:[]};
+    setData(d=>({...d,tasks:[...d.tasks,nt]}));
+    setModal(null);
+  };
+
+  const statuses=['All','Pending','In Progress','Waiting on Client','Completed'];
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Tasks</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>{filtered.length} tasks shown</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({title:'',client:'c1',service:'s1',step:'',assigned:'u2',status:'Pending',priority:'Medium',due:'',notes:''});setModal(true);}}>
+          <Icon n="plus"/> New task
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div style={{display:'flex',gap:10,marginBottom:20,flexWrap:'wrap'}}>
+        <div className="card" style={{padding:'10px 14px',display:'flex',gap:8,alignItems:'center'}}>
+          <span style={{fontSize:11,color:'var(--text3)',fontFamily:'var(--font-mono)'}}>STATUS</span>
+          {statuses.map(s=>(
+            <button key={s} className={`btn ${filter.status===s?'btn-primary':'btn-ghost'}`} style={{padding:'4px 10px',fontSize:12}} onClick={()=>setFilter(f=>({...f,status:s}))}>{s}</button>
+          ))}
+        </div>
+        <div className="card" style={{padding:'10px 14px',display:'flex',gap:8,alignItems:'center'}}>
+          <span style={{fontSize:11,color:'var(--text3)',fontFamily:'var(--font-mono)'}}>PRIORITY</span>
+          {['All','High','Medium','Low'].map(p=>(
+            <button key={p} className={`btn ${filter.priority===p?'btn-primary':'btn-ghost'}`} style={{padding:'4px 10px',fontSize:12}} onClick={()=>setFilter(f=>({...f,priority:p}))}>{p}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{display:'grid',gap:8}}>
+        {filtered.map(t=>{
+          const cl=data.clients.find(c=>c.id===t.client);
+          const user=data.users.find(u=>u.id===t.assigned);
+          const od=isOverdue(t.due)&&t.status!=='Completed';
+          return(
+            <div key={t.id} className="card" style={{padding:'14px 18px',display:'flex',alignItems:'center',gap:14,borderLeft:`3px solid ${od?'var(--red)':t.priority==='High'?'var(--accent)':t.priority==='Medium'?'var(--blue)':'var(--text3)'}`}}>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}>
+                  <span style={{fontWeight:500,fontSize:14}}>{t.title}</span>
+                  {od&&<span className="badge badge-red">Overdue</span>}
+                </div>
+                <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+                  <span style={{fontSize:11,color:'var(--text3)'}}>{cl?.name}</span>
+                  <span className="badge badge-gray" style={{fontSize:10}}>{t.step}</span>
+                  {t.notes&&<span style={{fontSize:11,color:'var(--text3)',fontStyle:'italic'}}>{t.notes.slice(0,60)}{t.notes.length>60?'…':''}</span>}
+                </div>
+              </div>
+              <div style={{display:'flex',alignItems:'center',gap:10,flexShrink:0}}>
+                <div style={{textAlign:'right'}}>
+                  <div style={{fontSize:12,fontFamily:'var(--font-mono)',color:od?'var(--red)':'var(--text2)'}}>{fmtDate(t.due)}</div>
+                  <div style={{fontSize:10,color:'var(--text3)'}}>{t.docs.length} doc{t.docs.length!==1?'s':''}</div>
+                </div>
+                <Avatar name={user?.name||''} size={24}/>
+                <span className={`badge ${prioColor(t.priority)}`}>{t.priority}</span>
+                <select value={t.status} onChange={e=>updateStatus(t.id,e.target.value)} style={{width:'auto',padding:'5px 8px',fontSize:12,cursor:'pointer'}}>
+                  {['Pending','In Progress','Waiting on Client','Completed'].map(s=><option key={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length===0&&<div className="empty-state card"><div className="icon">◫</div><div>No tasks match this filter</div></div>}
+      </div>
+
+      {modal&&(
+        <Modal title="New Task" onClose={()=>setModal(null)}>
+          <div className="form-group"><label>Task title *</label><input value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))}/></div>
+          <div className="form-row">
+            <div className="form-group"><label>Client</label>
+              <select value={form.client} onChange={e=>setForm(f=>({...f,client:e.target.value}))}>
+                {data.clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Service</label>
+              <select value={form.service} onChange={e=>setForm(f=>({...f,service:e.target.value}))}>
+                {data.services.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>Workflow step</label><input value={form.step} onChange={e=>setForm(f=>({...f,step:e.target.value}))} placeholder="e.g. Collect invoices"/></div>
+            <div className="form-group"><label>Assign to</label>
+              <select value={form.assigned} onChange={e=>setForm(f=>({...f,assigned:e.target.value}))}>
+                {data.users.filter(u=>u.role!=='Admin').map(u=><option key={u.id} value={u.id}>{u.name}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>Priority</label>
+              <select value={form.priority} onChange={e=>setForm(f=>({...f,priority:e.target.value}))}>
+                {['High','Medium','Low'].map(p=><option key={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Due date</label><input type="date" value={form.due} onChange={e=>setForm(f=>({...f,due:e.target.value}))}/></div>
+          </div>
+          <div className="form-group"><label>Notes</label><textarea value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} rows={3}/></div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:8}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Create task</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── COMPLIANCE TRACKER ─────────────────────────────────────────────────────────
+const CompliancePage=({data,setData})=>{
+  const [selected,setSelected]=useState(null);
+
+  const calendarDates=[
+    {date:'May 11',label:'GSTR-1 (Monthly)',type:'GST',clients:['c1','c4','c5']},
+    {date:'May 15',label:'TDS Challan deposit',type:'TDS',clients:['c4','c5']},
+    {date:'May 20',label:'GSTR-3B (Monthly)',type:'GST',clients:['c1','c3','c4','c5']},
+    {date:'May 31',label:'TDS Q4 Return',type:'TDS',clients:['c1','c4']},
+    {date:'Jun 15',label:'Advance Tax (Q1)',type:'ITR',clients:['c2','c5']},
+    {date:'Jun 30',label:'Audit completion',type:'Audit',clients:['c4']},
+    {date:'Jul 31',label:'ITR Filing deadline',type:'ITR',clients:['c2','c3','c5']},
+    {date:'Sep 30',label:'ROC Annual Filing',type:'ROC',clients:['c1','c4']},
+  ];
+
+  const typeColor={GST:'badge-blue',TDS:'badge-amber',ITR:'badge-green',ROC:'badge-purple',Audit:'badge-teal'};
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <h1 style={{fontFamily:'var(--font-serif)',fontSize:26,marginBottom:4}}>Compliance Calendar</h1>
+      <p style={{color:'var(--text2)',fontSize:13,marginBottom:24}}>All statutory deadlines across clients and services</p>
+
+      {/* Service definitions */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:12,marginBottom:28}}>
+        {data.services.map(s=>(
+          <div key={s.id} className="card" onClick={()=>setSelected(selected?.id===s.id?null:s)} style={{cursor:'pointer',borderColor:selected?.id===s.id?'var(--accent)':'var(--border)'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+              <span className={`badge badge-${s.color}`}>{s.name}</span>
+              <span className="badge badge-gray">{s.freq}</span>
+            </div>
+            <div style={{fontSize:11,color:'var(--text3)'}}>{s.steps.length} workflow steps</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Workflow steps if service selected */}
+      {selected&&(
+        <div className="card" style={{marginBottom:24,borderColor:'var(--accent)'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+            <h3 style={{fontSize:14,fontWeight:500}}>{selected.name} — Workflow Steps</h3>
+            <button className="btn btn-ghost" style={{padding:'4px 8px',fontSize:12}} onClick={()=>setSelected(null)}>Close</button>
+          </div>
+          <div style={{display:'flex',gap:8,alignItems:'center',overflowX:'auto',paddingBottom:4}}>
+            {selected.steps.map((step,i)=>(
+              <React.Fragment key={i}>
+                <div style={{background:'var(--bg3)',border:'1px solid var(--border)',borderRadius:'var(--r)',padding:'8px 14px',whiteSpace:'nowrap',fontSize:12,flexShrink:0}}>
+                  <div style={{fontSize:10,color:'var(--text3)',marginBottom:2,fontFamily:'var(--font-mono)'}}>STEP {i+1}</div>
+                  <div style={{fontWeight:500}}>{step}</div>
+                </div>
+                {i<selected.steps.length-1&&<span style={{color:'var(--text3)',flexShrink:0}}>→</span>}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Calendar */}
+      <div className="card" style={{padding:0}}>
+        <div style={{padding:'16px 20px',borderBottom:'1px solid var(--border)'}}>
+          <h3 style={{fontSize:14,fontWeight:500}}>Upcoming compliance deadlines</h3>
+        </div>
+        <table>
+          <thead><tr><th>Date</th><th>Compliance</th><th>Type</th><th>Affected clients</th><th>Status</th></tr></thead>
+          <tbody>
+            {calendarDates.map((d,i)=>{
+              const clients=d.clients.map(id=>data.clients.find(c=>c.id===id));
+              const isPast=i<2;
+              return(
+                <tr key={i}>
+                  <td><span style={{fontFamily:'var(--font-mono)',fontSize:12,color:isPast?'var(--text3)':'var(--accent)'}}>{d.date}</span></td>
+                  <td style={{fontWeight:500}}>{d.label}</td>
+                  <td><span className={`badge ${typeColor[d.type]||'badge-gray'}`}>{d.type}</span></td>
+                  <td>
+                    <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
+                      {clients.map(c=>c?<span key={c.id} className="tag">{c.name.split(' ').slice(0,2).join(' ')}</span>:null)}
+                    </div>
+                  </td>
+                  <td><span className={`badge ${isPast?'badge-green':'badge-amber'}`}>{isPast?'Filed':'Upcoming'}</span></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// ── DOCUMENTS ──────────────────────────────────────────────────────────────────
+const DocumentsPage=({data,setData})=>{
+  const [filter,setFilter]=useState({client:'All',type:'All',fy:'All'});
+  const [modal,setModal]=useState(false);
+  const [form,setForm]=useState({name:'',client:'c1',task:'',type:'Sales Register',fy:'FY24-25',uploadedBy:'u2'});
+
+  const docTypes=['Sales Register','Purchase Register','Bank Statement','TDS Challan','Filed Return','Financial Statement','Computation Sheet','Board Resolution','Other'];
+  const fyOptions=['FY24-25','FY23-24','FY22-23'];
+
+  const filtered=data.documents.filter(d=>(filter.client==='All'||d.client===filter.client)&&(filter.type==='All'||d.type===filter.type)&&(filter.fy==='All'||d.fy===filter.fy));
+
+  const save=()=>{
+    if(!form.name){alert('File name required');return;}
+    setData(d=>({...d,documents:[...d.documents,{...form,id:'d'+(Date.now()),uploaded:new Date().toISOString().split('T')[0],size:'—'}]}));
+    setModal(false);
+  };
+
+  // Missing docs detection
+  const missingMap=data.tasks.filter(t=>t.status!=='Completed'&&t.docs.length===0).map(t=>{
+    const cl=data.clients.find(c=>c.id===t.client);
+    return{task:t,client:cl};
+  });
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Documents</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>{data.documents.length} files in the system</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({name:'',client:'c1',task:'',type:'Sales Register',fy:'FY24-25',uploadedBy:'u2'});setModal(true);}}>
+          <Icon n="upload"/> Upload document
+        </button>
+      </div>
+
+      {/* Missing docs alert */}
+      {missingMap.length>0&&(
+        <div className="card" style={{marginBottom:20,background:'rgba(248,113,113,.05)',borderColor:'rgba(248,113,113,.2)'}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+            <Icon n="warning" size={14}/>
+            <span style={{fontWeight:500,color:'var(--red)',fontSize:14}}>Missing documents detected — {missingMap.length} tasks</span>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:8}}>
+            {missingMap.slice(0,6).map(({task,client})=>(
+              <div key={task.id} style={{background:'var(--bg3)',borderRadius:'var(--r)',padding:'8px 12px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                <div>
+                  <div style={{fontSize:12,fontWeight:500}}>{task.title.slice(0,30)}{task.title.length>30?'…':''}</div>
+                  <div style={{fontSize:11,color:'var(--text3)'}}>{client?.name}</div>
+                </div>
+                <span className="badge badge-red">0 docs</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Filters */}
+      <div style={{display:'flex',gap:10,marginBottom:20}}>
+        <select value={filter.client} onChange={e=>setFilter(f=>({...f,client:e.target.value}))} style={{width:'auto'}}>
+          <option value="All">All clients</option>
+          {data.clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
+        <select value={filter.type} onChange={e=>setFilter(f=>({...f,type:e.target.value}))} style={{width:'auto'}}>
+          <option value="All">All types</option>
+          {docTypes.map(t=><option key={t}>{t}</option>)}
+        </select>
+        <select value={filter.fy} onChange={e=>setFilter(f=>({...f,fy:e.target.value}))} style={{width:'auto'}}>
+          <option value="All">All FYs</option>
+          {fyOptions.map(f=><option key={f}>{f}</option>)}
+        </select>
+      </div>
+
+      <div className="card" style={{padding:0}}>
+        <table>
+          <thead><tr><th>File name</th><th>Client</th><th>Document type</th><th>FY</th><th>Linked task</th><th>Uploaded</th><th>By</th></tr></thead>
+          <tbody>
+            {filtered.map(d=>{
+              const cl=data.clients.find(c=>c.id===d.client);
+              const task=d.task?data.tasks.find(t=>t.id===d.task):null;
+              const user=data.users.find(u=>u.id===d.uploadedBy);
+              return(
+                <tr key={d.id}>
+                  <td>
+                    <div style={{display:'flex',alignItems:'center',gap:8}}>
+                      <span style={{fontSize:18,color:'var(--text3)'}}>{d.name.endsWith('.pdf')?'📄':d.name.endsWith('.xlsx')||d.name.endsWith('.xls')?'📊':'📁'}</span>
+                      <div>
+                        <div style={{fontWeight:500,fontSize:13}}>{d.name}</div>
+                        <div style={{fontSize:11,color:'var(--text3)'}}>{d.size}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{fontSize:12}}>{cl?.name}</td>
+                  <td><span className="badge badge-gray">{d.type}</span></td>
+                  <td><span style={{fontFamily:'var(--font-mono)',fontSize:12}}>{d.fy}</span></td>
+                  <td style={{fontSize:12,color:'var(--text2)'}}>{task?task.title.slice(0,30)+'…':'—'}</td>
+                  <td style={{fontSize:12,fontFamily:'var(--font-mono)',color:'var(--text2)'}}>{fmtDate(d.uploaded)}</td>
+                  <td>
+                    <div style={{display:'flex',alignItems:'center',gap:6}}>
+                      <Avatar name={user?.name||''} size={20}/>
+                      <span style={{fontSize:12}}>{user?.name?.split(' ')[0]}</span>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {filtered.length===0&&<tr><td colSpan={7} style={{textAlign:'center',color:'var(--text3)',padding:32}}>No documents found</td></tr>}
+          </tbody>
+        </table>
+      </div>
+
+      {modal&&(
+        <Modal title="Upload Document" onClose={()=>setModal(false)}>
+          <div className="form-group"><label>File name *</label><input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="e.g. April_Invoices_Ratan.xlsx"/></div>
+          <div className="form-row">
+            <div className="form-group"><label>Client</label>
+              <select value={form.client} onChange={e=>setForm(f=>({...f,client:e.target.value}))}>
+                {data.clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Document type</label>
+              <select value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>
+                {docTypes.map(t=><option key={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>Financial year</label>
+              <select value={form.fy} onChange={e=>setForm(f=>({...f,fy:e.target.value}))}>
+                {fyOptions.map(fy=><option key={fy}>{fy}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Link to task (optional)</label>
+              <select value={form.task} onChange={e=>setForm(f=>({...f,task:e.target.value}))}>
+                <option value="">— no task —</option>
+                {data.tasks.filter(t=>t.client===form.client).map(t=><option key={t.id} value={t.id}>{t.title}</option>)}
+              </select>
+            </div>
+          </div>
+          <div style={{background:'var(--bg3)',border:'1px dashed var(--border2)',borderRadius:'var(--r)',padding:'28px',textAlign:'center',marginBottom:16}}>
+            <div style={{fontSize:28,marginBottom:8}}>📎</div>
+            <div style={{color:'var(--text2)',fontSize:13}}>File upload simulated — metadata saved to DMS</div>
+            <div style={{fontSize:11,color:'var(--text3)',marginTop:4}}>In production: presigned S3 URL flow</div>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Save document</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── MEETINGS ───────────────────────────────────────────────────────────────────
+const MeetingsPage=({data,setData})=>{
+  const [modal,setModal]=useState(null);
+  const [detail,setDetail]=useState(null);
+  const [form,setForm]=useState({title:'',client:'',type:'Client',status:'Scheduled',date:'',participants:[],agenda:'',notes:'',actions:[]});
+  const [newAction,setNewAction]=useState('');
+
+  const save=()=>{
+    if(!form.title||!form.date){alert('Title and date required');return;}
+    if(modal==='add'){
+      setData(d=>({...d,meetings:[...d.meetings,{...form,id:'m'+(Date.now())}]}));
+    } else {
+      setData(d=>({...d,meetings:d.meetings.map(m=>m.id===form.id?form:m)}));
+    }
+    setModal(null);
+  };
+
+  const convertActions=meeting=>{
+    const newTasks=meeting.actions.map((a,i)=>({
+      id:'t_m'+(Date.now()+i),title:a,client:meeting.client||'',service:'s1',step:'From meeting action item',
+      assigned:'u2',status:'Pending',priority:'Medium',due:'',notes:`Auto-created from meeting: ${meeting.title}`,docs:[]
+    }));
+    setData(d=>({...d,tasks:[...d.tasks,...newTasks]}));
+    alert(`${newTasks.length} task(s) created from meeting action items`);
+  };
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Meetings</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>{data.meetings.length} meetings logged</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({title:'',client:'',type:'Client',status:'Scheduled',date:'',participants:[],agenda:'',notes:'',actions:[]});setModal('add');}}>
+          <Icon n="plus"/> Schedule meeting
+        </button>
+      </div>
+
+      <div style={{display:'grid',gap:12}}>
+        {data.meetings.map(m=>{
+          const cl=m.client?data.clients.find(c=>c.id===m.client):null;
+          return(
+            <div key={m.id} className="card" style={{display:'flex',gap:16,alignItems:'flex-start',borderLeft:`3px solid ${m.status==='Completed'?'var(--green)':m.status==='Cancelled'?'var(--red)':'var(--blue)'}`}}>
+              <div style={{flex:1}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+                  <span style={{fontWeight:500,fontSize:14}}>{m.title}</span>
+                  <span className={`badge ${statusColor(m.status)}`}>{m.status}</span>
+                  <span className={`badge ${m.type==='Client'?'badge-amber':'badge-purple'}`}>{m.type}</span>
+                </div>
+                {cl&&<div style={{fontSize:12,color:'var(--text3)',marginBottom:4}}>Client: {cl.name}</div>}
+                <div style={{fontSize:12,color:'var(--text2)',marginBottom:4}}>{m.agenda}</div>
+                <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+                  <span style={{fontSize:11,fontFamily:'var(--font-mono)',color:'var(--text3)'}}>{new Date(m.date).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
+                  <div style={{display:'flex',gap:4}}>
+                    {m.participants.map(pid=>{const u=data.users.find(x=>x.id===pid);return u?<Avatar key={pid} name={u.name} size={20}/>:null;})}
+                  </div>
+                  {m.actions.length>0&&<span className="badge badge-teal">{m.actions.length} action item{m.actions.length>1?'s':''}</span>}
+                </div>
+                {m.notes&&<div style={{marginTop:8,padding:'8px 10px',background:'var(--bg3)',borderRadius:'var(--r)',fontSize:12,color:'var(--text2)'}}>{m.notes}</div>}
+                {m.actions.length>0&&(
+                  <div style={{marginTop:8}}>
+                    {m.actions.map((a,i)=><div key={i} style={{fontSize:12,color:'var(--text2)',padding:'3px 0',borderBottom:'1px solid var(--border)',display:'flex',alignItems:'center',gap:6}}><span style={{color:'var(--accent)'}}>→</span>{a}</div>)}
+                  </div>
+                )}
+              </div>
+              <div style={{display:'flex',flexDirection:'column',gap:6,flexShrink:0}}>
+                <button className="btn btn-ghost" style={{fontSize:11,padding:'5px 10px'}} onClick={()=>setDetail(m)}>Notes</button>
+                {m.actions.length>0&&m.status==='Completed'&&(
+                  <button className="btn btn-ghost" style={{fontSize:11,padding:'5px 10px',color:'var(--teal)',borderColor:'rgba(45,212,191,.2)'}} onClick={()=>convertActions(m)}>→ Tasks</button>
+                )}
+                <button className="btn btn-ghost" style={{fontSize:11,padding:'5px 10px'}} onClick={()=>{setForm({...m});setModal('edit');}}>Edit</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Add/Edit meeting modal */}
+      {(modal==='add'||modal==='edit')&&(
+        <Modal title={modal==='add'?'Schedule Meeting':'Edit Meeting'} onClose={()=>setModal(null)}>
+          <div className="form-group"><label>Meeting title *</label><input value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))}/></div>
+          <div className="form-row">
+            <div className="form-group"><label>Type</label>
+              <select value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>
+                <option>Client</option><option>Internal</option>
+              </select>
+            </div>
+            <div className="form-group"><label>Status</label>
+              <select value={form.status} onChange={e=>setForm(f=>({...f,status:e.target.value}))}>
+                <option>Scheduled</option><option>Completed</option><option>Cancelled</option>
+              </select>
+            </div>
+          </div>
+          {form.type==='Client'&&(
+            <div className="form-group"><label>Client (optional)</label>
+              <select value={form.client} onChange={e=>setForm(f=>({...f,client:e.target.value}))}>
+                <option value="">— internal —</option>
+                {data.clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+          )}
+          <div className="form-row">
+            <div className="form-group"><label>Date & time *</label><input type="datetime-local" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+            <div className="form-group"><label>Participants</label>
+              <div style={{display:'flex',flexWrap:'wrap',gap:6,padding:'8px 0'}}>
+                {data.users.map(u=>(
+                  <label key={u.id} style={{display:'flex',alignItems:'center',gap:4,fontSize:12,cursor:'pointer'}}>
+                    <input type="checkbox" checked={form.participants.includes(u.id)} style={{width:'auto'}} onChange={e=>{setForm(f=>({...f,participants:e.target.checked?[...f.participants,u.id]:f.participants.filter(x=>x!==u.id)}));}}/>
+                    {u.name.split(' ')[0]}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="form-group"><label>Agenda</label><textarea value={form.agenda} onChange={e=>setForm(f=>({...f,agenda:e.target.value}))} rows={2}/></div>
+          <div className="form-group"><label>Meeting notes</label><textarea value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} rows={2} placeholder="Visible after meeting is completed"/></div>
+          <div className="form-group">
+            <label>Action items</label>
+            {form.actions.map((a,i)=>(
+              <div key={i} style={{display:'flex',gap:6,marginBottom:6,alignItems:'center'}}>
+                <input value={a} onChange={e=>setForm(f=>{const ac=[...f.actions];ac[i]=e.target.value;return{...f,actions:ac};})} style={{flex:1}}/>
+                <button className="btn btn-ghost" style={{padding:'5px 8px',flexShrink:0}} onClick={()=>setForm(f=>({...f,actions:f.actions.filter((_,j)=>j!==i)}))}><Icon n="x" size={11}/></button>
+              </div>
+            ))}
+            <div style={{display:'flex',gap:6}}>
+              <input placeholder="Add action item…" value={newAction} onChange={e=>setNewAction(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&newAction){setForm(f=>({...f,actions:[...f.actions,newAction]}));setNewAction('');}}}/>
+              <button className="btn btn-ghost" style={{flexShrink:0}} onClick={()=>{if(newAction){setForm(f=>({...f,actions:[...f.actions,newAction]}));setNewAction('');}}}>Add</button>
+            </div>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:8}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Save meeting</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── COMMUNICATIONS ─────────────────────────────────────────────────────────────
+const CommsPage=({data,setData})=>{
+  const [modal,setModal]=useState(false);
+  const [form,setForm]=useState({client:'c1',task:'',channel:'Email',note:'',by:'u2'});
+
+  const save=()=>{
+    if(!form.note){alert('Note required');return;}
+    const nc={...form,id:'com'+(Date.now()),date:new Date().toISOString().split('T')[0]};
+    setData(d=>({...d,communications:[nc,...d.communications]}));
+    setModal(false);
+  };
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Communications</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>All client interactions logged</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({client:'c1',task:'',channel:'Email',note:'',by:'u2'});setModal(true);}}>
+          <Icon n="plus"/> Log communication
+        </button>
+      </div>
+
+      <div style={{display:'grid',gap:10}}>
+        {data.communications.map(c=>{
+          const cl=data.clients.find(x=>x.id===c.client);
+          const task=c.task?data.tasks.find(t=>t.id===c.task):null;
+          const user=data.users.find(u=>u.id===c.by);
+          const channelColor={Email:'badge-blue',Call:'badge-green',WhatsApp:'badge-teal',Meeting:'badge-purple'}[c.channel]||'badge-gray';
+          return(
+            <div key={c.id} className="card" style={{display:'flex',gap:14,alignItems:'flex-start'}}>
+              <div style={{marginTop:2,flexShrink:0}}>
+                <span className={`badge ${channelColor}`}>{c.channel}</span>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{display:'flex',gap:8,alignItems:'center',marginBottom:4}}>
+                  <span style={{fontWeight:500,fontSize:13}}>{cl?.name}</span>
+                  {task&&<span className="badge badge-gray" style={{fontSize:10}}>re: {task.title.slice(0,30)}…</span>}
+                </div>
+                <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.5}}>{c.note}</p>
+              </div>
+              <div style={{textAlign:'right',flexShrink:0}}>
+                <div style={{fontSize:11,fontFamily:'var(--font-mono)',color:'var(--text3)'}}>{fmtDate(c.date)}</div>
+                <div style={{display:'flex',alignItems:'center',gap:4,justifyContent:'flex-end',marginTop:4}}>
+                  <Avatar name={user?.name||''} size={18}/>
+                  <span style={{fontSize:11,color:'var(--text3)'}}>{user?.name?.split(' ')[0]}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {modal&&(
+        <Modal title="Log Communication" onClose={()=>setModal(false)}>
+          <div className="form-row">
+            <div className="form-group"><label>Client</label>
+              <select value={form.client} onChange={e=>setForm(f=>({...f,client:e.target.value}))}>
+                {data.clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Channel</label>
+              <select value={form.channel} onChange={e=>setForm(f=>({...f,channel:e.target.value}))}>
+                {['Email','Call','WhatsApp','Meeting'].map(ch=><option key={ch}>{ch}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-group"><label>Linked task (optional)</label>
+            <select value={form.task} onChange={e=>setForm(f=>({...f,task:e.target.value}))}>
+              <option value="">— none —</option>
+              {data.tasks.filter(t=>t.client===form.client).map(t=><option key={t.id} value={t.id}>{t.title}</option>)}
+            </select>
+          </div>
+          <div className="form-group"><label>Note / summary *</label><textarea value={form.note} onChange={e=>setForm(f=>({...f,note:e.target.value}))} rows={4} placeholder="What was discussed or communicated?"/></div>
+          <div className="form-group"><label>Logged by</label>
+            <select value={form.by} onChange={e=>setForm(f=>({...f,by:e.target.value}))}>
+              {data.users.map(u=><option key={u.id} value={u.id}>{u.name}</option>)}
+            </select>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:8}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Save log</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── BILLING ────────────────────────────────────────────────────────────────────
+const BillingPage=({data,setData})=>{
+  const [modal,setModal]=useState(false);
+  const [form,setForm]=useState({client:'c1',service:'s1',desc:'',amount:'',paid:'0',status:'Unpaid',date:''});
+
+  const save=()=>{
+    if(!form.desc||!form.amount){alert('Description and amount required');return;}
+    setData(d=>({...d,invoices:[...d.invoices,{...form,id:'inv'+(Date.now()),amount:+form.amount,paid:+form.paid}]}));
+    setModal(false);
+  };
+
+  const markPaid=id=>{
+    setData(d=>({...d,invoices:d.invoices.map(inv=>inv.id===id?{...inv,paid:inv.amount,status:'Paid'}:inv)}));
+  };
+
+  const total=data.invoices.reduce((a,i)=>a+i.amount,0);
+  const paid=data.invoices.reduce((a,i)=>a+i.paid,0);
+  const outstanding=total-paid;
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Billing & Invoicing</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>{data.invoices.length} invoices</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({client:'c1',service:'s1',desc:'',amount:'',paid:'0',status:'Unpaid',date:new Date().toISOString().split('T')[0]});setModal(true);}}>
+          <Icon n="plus"/> New invoice
+        </button>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:14,marginBottom:24}}>
+        {[
+          {l:'Total billed',v:'₹'+total.toLocaleString('en-IN'),c:'var(--text)'},
+          {l:'Collected',v:'₹'+paid.toLocaleString('en-IN'),c:'var(--green)'},
+          {l:'Outstanding',v:'₹'+outstanding.toLocaleString('en-IN'),c:'var(--red)'},
+          {l:'Unpaid invoices',v:data.invoices.filter(i=>i.status!=='Paid').length,c:'var(--accent)'},
+        ].map(s=>(
+          <div key={s.l} className="card" style={{padding:'16px 18px'}}>
+            <div style={{fontSize:11,color:'var(--text3)',marginBottom:8,fontFamily:'var(--font-mono)',textTransform:'uppercase',letterSpacing:'.06em'}}>{s.l}</div>
+            <div style={{fontFamily:'var(--font-serif)',fontSize:26,color:s.c}}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card" style={{padding:0}}>
+        <table>
+          <thead><tr><th>Invoice</th><th>Client</th><th>Service</th><th>Amount</th><th>Paid</th><th>Outstanding</th><th>Status</th><th>Date</th><th></th></tr></thead>
+          <tbody>
+            {data.invoices.map(inv=>{
+              const cl=data.clients.find(c=>c.id===inv.client);
+              const svc=data.services.find(s=>s.id===inv.service);
+              return(
+                <tr key={inv.id}>
+                  <td><span style={{fontFamily:'var(--font-mono)',fontSize:11,color:'var(--text3)'}}>{inv.id.toUpperCase()}</span></td>
+                  <td style={{fontWeight:500,fontSize:13}}>{cl?.name}</td>
+                  <td>{svc?<span className={`badge badge-${svc.color}`}>{svc.name}</span>:'—'}</td>
+                  <td><span style={{fontFamily:'var(--font-mono)'}}>₹{inv.amount.toLocaleString('en-IN')}</span></td>
+                  <td><span style={{fontFamily:'var(--font-mono)',color:'var(--green)'}}>₹{inv.paid.toLocaleString('en-IN')}</span></td>
+                  <td><span style={{fontFamily:'var(--font-mono)',color:inv.amount-inv.paid>0?'var(--red)':'var(--text3)'}}>₹{(inv.amount-inv.paid).toLocaleString('en-IN')}</span></td>
+                  <td><span className={`badge ${inv.status==='Paid'?'badge-green':inv.status==='Partial'?'badge-amber':'badge-red'}`}>{inv.status}</span></td>
+                  <td style={{fontSize:11,fontFamily:'var(--font-mono)',color:'var(--text2)'}}>{fmtDate(inv.date)}</td>
+                  <td>
+                    {inv.status!=='Paid'&&(
+                      <button className="btn btn-ghost" style={{fontSize:11,padding:'4px 10px',color:'var(--green)',borderColor:'rgba(62,207,142,.2)'}} onClick={()=>markPaid(inv.id)}>Mark paid</button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {modal&&(
+        <Modal title="New Invoice" onClose={()=>setModal(false)}>
+          <div className="form-row">
+            <div className="form-group"><label>Client</label>
+              <select value={form.client} onChange={e=>setForm(f=>({...f,client:e.target.value}))}>
+                {data.clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Service</label>
+              <select value={form.service} onChange={e=>setForm(f=>({...f,service:e.target.value}))}>
+                {data.services.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-group"><label>Description *</label><input value={form.desc} onChange={e=>setForm(f=>({...f,desc:e.target.value}))} placeholder="e.g. GSTR-3B Filing — May 2025"/></div>
+          <div className="form-row">
+            <div className="form-group"><label>Amount (₹) *</label><input type="number" value={form.amount} onChange={e=>setForm(f=>({...f,amount:e.target.value}))}/></div>
+            <div className="form-group"><label>Invoice date</label><input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:8}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Create invoice</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── TEAM (USERS) ───────────────────────────────────────────────────────────────
+const TeamPage=({data,setData})=>{
+  const [modal,setModal]=useState(false);
+  const [form,setForm]=useState({name:'',email:'',role:'Staff'});
+
+  const save=()=>{
+    if(!form.name||!form.email){alert('Name and email required');return;}
+    setData(d=>({...d,users:[...d.users,{...form,id:'u'+(Date.now()),avatar:form.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}]}));
+    setModal(false);
+  };
+
+  return(
+    <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h1 style={{fontFamily:'var(--font-serif)',fontSize:26}}>Team</h1>
+          <p style={{color:'var(--text2)',fontSize:13,marginTop:2}}>{data.users.length} team members</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>{setForm({name:'',email:'',role:'Staff'});setModal(true);}}>
+          <Icon n="plus"/> Add member
+        </button>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:14}}>
+        {data.users.map(u=>{
+          const activeTasks=data.tasks.filter(t=>t.assigned===u.id&&t.status!=='Completed');
+          const completedTasks=data.tasks.filter(t=>t.assigned===u.id&&t.status==='Completed');
+          const assignedClients=data.clients.filter(c=>c.assignedStaff===u.id);
+          return(
+            <div key={u.id} className="card">
+              <div style={{display:'flex',gap:12,alignItems:'center',marginBottom:16}}>
+                <Avatar name={u.name} size={44}/>
+                <div>
+                  <div style={{fontWeight:500,fontSize:14}}>{u.name}</div>
+                  <div style={{fontSize:12,color:'var(--text3)'}}>{u.email}</div>
+                  <span className={`badge ${u.role==='Admin'?'badge-red':u.role==='CA'?'badge-blue':'badge-gray'}`}>{u.role}</span>
+                </div>
+              </div>
+              <div className="divider"/>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,textAlign:'center'}}>
+                {[
+                  {l:'Active tasks',v:activeTasks.length},
+                  {l:'Completed',v:completedTasks.length},
+                  {l:'Clients',v:assignedClients.length},
+                ].map(s=>(
+                  <div key={s.l}>
+                    <div style={{fontSize:20,fontFamily:'var(--font-serif)',color:'var(--accent)'}}>{s.v}</div>
+                    <div style={{fontSize:10,color:'var(--text3)',marginTop:2}}>{s.l}</div>
+                  </div>
+                ))}
+              </div>
+              {activeTasks.length>0&&(
+                <div style={{marginTop:12}}>
+                  <div style={{fontSize:10,color:'var(--text3)',marginBottom:4,textTransform:'uppercase',letterSpacing:'.06em'}}>Active workload</div>
+                  <div className="progress-bar"><div className="progress-fill" style={{width:`${Math.min(activeTasks.length/8*100,100)}%`,background:activeTasks.length>5?'var(--red)':activeTasks.length>3?'var(--accent)':'var(--green)'}}/></div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* RBAC summary */}
+      <div className="card" style={{marginTop:24,padding:0}}>
+        <div style={{padding:'14px 18px',borderBottom:'1px solid var(--border)'}}>
+          <h3 style={{fontSize:14,fontWeight:500}}>Role permissions</h3>
+        </div>
+        <table>
+          <thead><tr><th>Capability</th><th>Admin</th><th>CA / Manager</th><th>Staff / Article</th></tr></thead>
+          <tbody>
+            {[
+              ['Create / delete clients','✓','✓','—'],
+              ['Enrol client in service','✓','✓','—'],
+              ['Create & reassign tasks','✓','✓','Own only'],
+              ['Generate invoices','✓','✓','—'],
+              ['View billing & financials','✓','✓','—'],
+              ['Manage users & roles','✓','—','—'],
+              ['View audit trail','✓','✓','—'],
+            ].map(([cap,...vals])=>(
+              <tr key={cap}>
+                <td style={{fontSize:13}}>{cap}</td>
+                {vals.map((v,i)=><td key={i}><span style={{color:v==='✓'?'var(--green)':v==='—'?'var(--text3)':'var(--accent)',fontFamily:'var(--font-mono)',fontSize:13}}>{v}</span></td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {modal&&(
+        <Modal title="Add Team Member" onClose={()=>setModal(false)}>
+          <div className="form-group"><label>Full name *</label><input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/></div>
+          <div className="form-group"><label>Email *</label><input value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))}/></div>
+          <div className="form-group"><label>Role</label>
+            <select value={form.role} onChange={e=>setForm(f=>({...f,role:e.target.value}))}>
+              <option>Admin</option><option>CA</option><option>Staff</option>
+            </select>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:8}}>
+            <button className="btn btn-ghost" onClick={()=>setModal(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={save}>Add member</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ── AUDIT TRAIL ────────────────────────────────────────────────────────────────
+const AuditPage=({data})=>(
+  <div style={{padding:'28px 32px',overflowY:'auto',flex:1}}>
+    <h1 style={{fontFamily:'var(--font-serif)',fontSize:26,marginBottom:4}}>Audit Trail</h1>
+    <p style={{color:'var(--text2)',fontSize:13,marginBottom:24}}>Every action in the system, timestamped and attributed</p>
+    <div className="card" style={{padding:0}}>
+      <table>
+        <thead><tr><th>Timestamp</th><th>User</th><th>Action</th><th>Entity</th><th>Detail</th></tr></thead>
+        <tbody>
+          {data.auditLog.map(log=>{
+            const user=data.users.find(u=>u.id===log.actor);
+            return(
+              <tr key={log.id}>
+                <td><span style={{fontFamily:'var(--font-mono)',fontSize:11,color:'var(--text3)'}}>{new Date(log.ts).toLocaleString('en-IN')}</span></td>
+                <td>
+                  <div style={{display:'flex',alignItems:'center',gap:6}}>
+                    <Avatar name={user?.name||''} size={22}/>
+                    <span style={{fontSize:12}}>{user?.name}</span>
+                  </div>
+                </td>
+                <td style={{fontWeight:500,fontSize:13}}>{log.action}</td>
+                <td><span className="badge badge-gray">{log.entity}</span></td>
+                <td style={{fontSize:12,color:'var(--text2)'}}>{log.detail}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
+// ── ROOT APP ───────────────────────────────────────────────────────────────────
+const App=()=>{
+  const [page,setPage]=useState('dashboard');
+  const [data,setData]=useState(SEED);
+
+  const pages={
+    dashboard:<Dashboard data={data} setPage={setPage}/>,
+    clients:<ClientsPage data={data} setData={setData}/>,
+    tasks:<TasksPage data={data} setData={setData}/>,
+    compliance:<CompliancePage data={data} setData={setData}/>,
+    documents:<DocumentsPage data={data} setData={setData}/>,
+    meetings:<MeetingsPage data={data} setData={setData}/>,
+    communications:<CommsPage data={data} setData={setData}/>,
+    billing:<BillingPage data={data} setData={setData}/>,
+    users:<TeamPage data={data} setData={setData}/>,
+    audit:<AuditPage data={data}/>,
+  };
+
+  return(
+    <div style={{display:'flex',height:'100vh',overflow:'hidden'}}>
+      <Sidebar page={page} setPage={setPage}/>
+      <main style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden',background:'var(--bg)'}}>
+        {/* Top bar */}
+        <div style={{height:48,borderBottom:'1px solid var(--border)',display:'flex',alignItems:'center',padding:'0 32px',gap:12,flexShrink:0,background:'var(--bg)'}}>
+          <div style={{flex:1,fontSize:12,color:'var(--text3)',fontFamily:'var(--font-mono)'}}>
+            {MENU.find(m=>m.id===page)?.label?.toUpperCase()} / FY 2025-26
+          </div>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <span className="badge badge-amber">⚡ 2 overdue</span>
+            <span className="badge badge-blue">📅 3 due this week</span>
+            <span className="badge badge-gray" style={{fontFamily:'var(--font-mono)',fontSize:11}}>10 May 2025</span>
+          </div>
+        </div>
+        <div style={{flex:1,overflow:'hidden',display:'flex',flexDirection:'column'}}>
+          {pages[page]||<div style={{padding:32,color:'var(--text3)'}}>Page not found</div>}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
